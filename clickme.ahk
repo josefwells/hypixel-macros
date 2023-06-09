@@ -15,8 +15,8 @@ wheatSpeed := 4  ; 4.3*93 = 4
 ; Walking time.  96blocks ~ -2 blocks side = 94blocks
 plotWidth := 94
 wheatTime := 23500 ; (plotWidth / wheatSpeed)*1000
-
-;wheatTime := 20000 ; (plotWidth / wheatSpeed)*1000
+;wheatTime := 23500 ; (plotWidth / wheatSpeed)*1000 ; too short still?
+;wheatTime := 20000 ; (plotWidth / wheatSpeed)*1000 ; wy too short
 ;wheatTime := 100
 
 ; Pause  ; Start the script paused initially
@@ -53,22 +53,28 @@ Rand_click() {
 }
 
 Rand_mouse() {
-    randomX := Randomize(-420, 420)
-    randomY := Randomize(-69, 69)
+    randomX := Randomize(-69, 69)
+    randomY := Randomize(-6, 9)
     MouseMove, %randomX%, %randomY%, Randomize(20,69), R
 }
 
 Warp_garden() {
 	; Assume this warp gets us lined up.
-	Send, t/
+	Send, t
+	randtime := Randomize(69, 169)
+	Sleep, randtime
+	Send, /
+	randtime := Randomize(69, 169)
+	Sleep, randtime
         Send, warp{space}garden
+	randtime := Randomize(69, 169)
 	Send, {enter}
 	Sleep, 4069
 }
 
 Short_forward() {
 	; Move forward a short random time
-	randtime := Randomize(169-420)
+	randtime := Randomize(169, 420)
 	Send, {w Down}
 	Sleep, randtime
 	Send, {w Up}
@@ -89,6 +95,7 @@ Walk_garden(crop) {
 		SendInput, {d Up}
 		; forward  this calculation is whack and probably only works on wheat
 		SendInput, {space Down}
+		SendInput, {w Down}
 		randomBuf := Randomize(269,420) + crop/17.0
 		Sleep, randomBuf
 		SendInput, {w Up}
@@ -115,6 +122,12 @@ Walk_garden(crop) {
 
 
 F6::
+SendInput, {space Up}
+SendInput, {w Up}
+SendInput, {a Up}
+SendInput, {s Up}
+SendInput, {d Up}
+Click, Up Left
 Pause
 return
 
