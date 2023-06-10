@@ -10,10 +10,16 @@ buttonList := ["a", "s", "d", "w"]
 
 ; Walking speed = 4.3B/s * <speed> = X blocks/sec
 wheatSpeed := 4  ; 4.3*93 = 4
-;pumpkinSpeed = 115  ; 4.3*115 <sideways?>
+pumpkinSpeed = 7.53  ; 4.3*1.75 <sideways?>
 
 ; Walking time.  96blocks ~ -2 blocks side = 94blocks
-plotWidth := 94
+; wheatPlotWidth := 94
+; PumpkinPlotWidth := 188
+
+; Walking time pumpin double wide. 188 blocks
+;pumpkinTime := 21500 ; (pumplinPlotWidth / pumpkinSpeed )*1000 ; too short
+pumpkinTime := 24900 ; (pumplinPlotWidth / pumpkinSpeed )*1000 ; too short
+
 wheatTime := 23500 ; (plotWidth / wheatSpeed)*1000
 ;wheatTime := 23500 ; (plotWidth / wheatSpeed)*1000 ; too short still?
 ;wheatTime := 20000 ; (plotWidth / wheatSpeed)*1000 ; wy too short
@@ -68,8 +74,15 @@ Warp_garden() {
 	Sleep, randtime
         Send, warp{space}garden
 	randtime := Randomize(69, 169)
+	Sleep, randtime
 	Send, {enter}
-	Sleep, 4069
+	randtime := Randomize(169, 269)
+	Sleep, randtime
+	Send, {Lshift Down}
+	Sleep, randtime
+        Send, {Lshift Up}
+	randtime := Randomize(1420, 2069)
+	Sleep, randtime
 }
 
 Short_forward() {
@@ -80,10 +93,10 @@ Short_forward() {
 	Send, {w Up}
 }
 
-Walk_garden(crop) {
+Walk_garden(crop, rows) {
         ; Start clicking
 	SendInput, {space Down}
-	Loop 16 {
+	Loop % rows {
 		randomBuf := Randomize(69,169)
 		Sleep, randomBuf
 		; Start right
@@ -99,7 +112,7 @@ Walk_garden(crop) {
 		randomBuf := Randomize(269,420) + crop/17.0
 		Sleep, randomBuf
 		SendInput, {w Up}
-		; left
+		; lefts
 		SendInput, {space Down}
 		SendInput, {a Down}
 		Short_forward()
@@ -157,6 +170,16 @@ Loop {
 F8::
 Loop {
 	Warp_garden()
-	Walk_garden(wheatTime)
+	Walk_garden(wheatTime, 16)
 }
 
+; Pumpkin loop
+F9::
+Loop {
+	Warp_garden()
+	Walk_garden(pumpkinTime, 8)
+}
+
+^r:: ; press control+r to reload
+Reload
+return
