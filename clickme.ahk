@@ -93,7 +93,8 @@ Short_forward() {
 	Send, {w Up}
 }
 
-Walk_garden(crop, rows) {
+
+Walk_pgarden(crop, rows) {
         ; Start clicking
 	SendInput, {space Down}
 	Loop % rows {
@@ -109,7 +110,7 @@ Walk_garden(crop, rows) {
 		; forward  this calculation is whack and probably only works on wheat
 		SendInput, {space Down}
 		SendInput, {w Down}
-		randomBuf := Randomize(269,420) + crop/17.0
+		randomBuf := Randomize(269,420) + crop/16.5
 		Sleep, randomBuf
 		SendInput, {w Up}
 		; lefts
@@ -122,7 +123,55 @@ Walk_garden(crop, rows) {
 		; forward  this calculation is whack and probably only works on wheat
 		SendInput, {space Down}
 		SendInput, {w Down}
-		randomBuf := Randomize(269,420) + crop/17.0
+		randomBuf := Randomize(269,420) + crop/16.5
+		Sleep, randomBuf
+		SendInput, {w Up}
+		SendInput, {d Down}
+		Short_forward()
+		SendInput, {d up}
+		SendInput, {space Down}
+		SendInput, {w Down}
+		randomBuf := Randomize(269,420) + crop/16.5
+		Sleep, randomBuf
+		SendInput, {w Up}
+		; temp pause at the end of loop
+		randomBuf := Randomize(69,169)
+		Sleep, randomBuf
+	}
+	SendInput, {space Up}
+}
+		
+
+Walk_wgarden(crop, rows) {
+        ; Start clicking
+	SendInput, {space Down}
+	Loop % rows {
+		randomBuf := Randomize(69,169)
+		Sleep, randomBuf
+		; Start right
+		SendInput, {space Down}
+		SendInput, {d Down}
+		Short_forward()
+		randomBuf := Randomize(1069,1420) + crop
+		Sleep, randomBuf
+		SendInput, {d Up}
+		; forward  this calculation is whack and probably only works on wheat
+		SendInput, {space Down}
+		SendInput, {w Down}
+		randomBuf := Randomize(269,420) + crop/16.5
+		Sleep, randomBuf
+		SendInput, {w Up}
+		; lefts
+		SendInput, {space Down}
+		SendInput, {a Down}
+		Short_forward()
+		randomBuf := Randomize(1069,1420) + crop
+		Sleep, randomBuf
+		SendInput, {a Up}
+		; forward  this calculation is whack and probably only works on wheat
+		SendInput, {space Down}
+		SendInput, {w Down}
+		randomBuf := Randomize(269,420) + crop/16.5
 		Sleep, randomBuf
 		SendInput, {w Up}
 		; temp pause at the end of loop
@@ -170,14 +219,14 @@ Loop {
 F8::
 Loop {
 	Warp_garden()
-	Walk_garden(wheatTime, 16)
+	Walk_wgarden(wheatTime, 16)
 }
 
 ; Pumpkin loop
 F9::
 Loop {
 	Warp_garden()
-	Walk_garden(pumpkinTime, 8)
+	Walk_pgarden(pumpkinTime, 9)
 }
 
 ^r:: ; press control+r to reload
