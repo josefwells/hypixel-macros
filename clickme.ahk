@@ -10,7 +10,9 @@ buttonList := ["a", "s", "d", "w"]
 
 ; Walking speed = 4.3B/s * <speed> = X blocks/sec
 wheatSpeed := 4  ; 4.3*93 = 4
-pumpkinSpeed = 7.53  ; 4.3*1.75 <sideways?>
+pumpkinSpeed := 7.53  ; 4.3*1.75 <sideways?>
+wartSpeed := 4 ; 4.3*93 = 4
+
 
 ; Walking time.  96blocks ~ -2 blocks side = 94blocks
 ; wheatPlotWidth := 94
@@ -21,6 +23,7 @@ pumpkinSpeed = 7.53  ; 4.3*1.75 <sideways?>
 pumpkinTime := 24900 ; (pumplinPlotWidth / pumpkinSpeed )*1000 ; too short
 
 wheatTime := 23500 ; (plotWidth / wheatSpeed)*1000
+wartTime := 23500 ; (plotWidth / wheatSpeed)*1000
 ;wheatTime := 23500 ; (plotWidth / wheatSpeed)*1000 ; too short still?
 ;wheatTime := 20000 ; (plotWidth / wheatSpeed)*1000 ; wy too short
 ;wheatTime := 100
@@ -142,6 +145,7 @@ Walk_pgarden(crop, rows) {
 }
 		
 
+; wgarden = wheat/wart, fun!
 Walk_wgarden(crop, rows) {
         ; Start clicking
 	SendInput, {space Down}
@@ -227,6 +231,13 @@ F9::
 Loop {
 	Warp_garden()
 	Walk_pgarden(pumpkinTime, 9)
+}
+
+; Wart loop
+F10::
+Loop {
+	Warp_garden()
+	Walk_wgarden(wartTime, 15)
 }
 
 ^r:: ; press control+r to reload
