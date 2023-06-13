@@ -194,7 +194,7 @@ SendInput, {a Up}
 SendInput, {s Up}
 SendInput, {d Up}
 Click, Up Left
-Pause
+Pause,, 1
 return
 
 ; F10::
@@ -239,6 +239,14 @@ Loop {
 	Warp_garden()
 	Walk_wgarden(wartTime, 15)
 }
+
+; Short loop (carrot/potato)
+F11::
+Loop {
+	Warp_garden()
+	Walk_wgarden(wartTime, 8)
+}
+
 
 ^r:: ; press control+r to reload
 Reload
