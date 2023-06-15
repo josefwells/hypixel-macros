@@ -23,7 +23,7 @@ wartSpeed := 4 ; 4.3*93 = 4
 pumpkinTime := 24900 ; (pumplinPlotWidth / pumpkinSpeed )*1000 ; too short
 
 wheatTime := 23500 ; (plotWidth / wheatSpeed)*1000
-wartTime := 23500 ; (plotWidth / wheatSpeed)*1000
+wartTime := 47500 ; (plotWidth*2 / wheatSpeed)*1000
 ;wheatTime := 23500 ; (plotWidth / wheatSpeed)*1000 ; too short still?
 ;wheatTime := 20000 ; (plotWidth / wheatSpeed)*1000 ; wy too short
 ;wheatTime := 100
@@ -237,7 +237,7 @@ Loop {
 F10::
 Loop {
 	Warp_garden()
-	Walk_wgarden(wartTime, 15)
+	Walk_wgarden(wartTime, 7)
 }
 
 ; Short loop (carrot/potato)
