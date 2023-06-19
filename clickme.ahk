@@ -12,7 +12,7 @@ buttonList := ["a", "s", "d", "w"]
 wheatSpeed := 4  ; 4.3*93 = 4
 pumpkinSpeed := 7.53  ; 4.3*1.75 <sideways?>
 wartSpeed := 4 ; 4.3*93 = 4
-
+caneSpeed := 10 ; 4.3*2.33 = 10
 
 ; Walking time.  96blocks ~ -2 blocks side = 94blocks
 ; wheatPlotWidth := 94
@@ -24,9 +24,15 @@ pumpkinTime := 24900 ; (pumplinPlotWidth / pumpkinSpeed )*1000 ; too short
 
 wheatTime := 23500 ; (plotWidth / wheatSpeed)*1000
 wartTime := 47500 ; (plotWidth*2 / wheatSpeed)*1000
+
+caneTime := 18000 ; (plotWidth*2 / caneSpeed)*1000
 ;wheatTime := 23500 ; (plotWidth / wheatSpeed)*1000 ; too short still?
 ;wheatTime := 20000 ; (plotWidth / wheatSpeed)*1000 ; wy too short
 ;wheatTime := 100
+
+
+
+;cane 15 lanes
 
 ; Pause  ; Start the script paused initially
 
@@ -96,6 +102,14 @@ Short_forward() {
 	Send, {w Up}
 }
 
+Short_backward() {
+	; Move forward a short random time
+	randtime := Randomize(169, 420)
+	Send, {s Down}
+	Sleep, randtime
+	Send, {s Up}
+}
+
 
 Walk_pgarden(crop, rows) {
         ; Start clicking
@@ -143,8 +157,51 @@ Walk_pgarden(crop, rows) {
 	}
 	SendInput, {space Up}
 }
-		
 
+; cgarden = cane, fun!
+Walk_cgarden(crop, rows) {
+        ; Start clicking
+	SendInput, {space Down}
+	Loop % rows {
+		randomBuf := Randomize(69,169)
+		Sleep, randomBuf
+		; Start right
+		SendInput, {space Down}
+		SendInput, {d Down}
+		randomBuf := Randomize(320,469)
+		Sleep, randomBuf
+		Short_backward()
+		randomBuf := Randomize(1069,1420) + crop
+		Sleep, randomBuf
+		SendInput, {d Up}
+		; forward  this calculation is whack and probably only works on wheat
+		SendInput, {space Down}
+		SendInput, {w Down}
+		randomBuf := Randomize(269,420) + 769
+		Sleep, randomBuf
+		SendInput, {w Up}
+		; lefts
+		SendInput, {space Down}
+		SendInput, {a Down}
+		randomBuf := Randomize(320,469)
+		Sleep, randomBuf
+		Short_backward()
+		randomBuf := Randomize(1069,1420) + crop
+		Sleep, randomBuf
+		SendInput, {a Up}
+		; forward  this calculation is whack and probably only works on wheat
+		SendInput, {space Down}
+		SendInput, {w Down}
+		randomBuf := Randomize(269,420) + 769
+		Sleep, randomBuf
+		SendInput, {w Up}
+		; temp pause at the end of loop
+		randomBuf := Randomize(69,169)
+		Sleep, randomBuf
+	}
+	SendInput, {space Up}
+}
+		
 ; wgarden = wheat/wart, fun!
 Walk_wgarden(crop, rows) {
         ; Start clicking
@@ -162,7 +219,7 @@ Walk_wgarden(crop, rows) {
 		; forward  this calculation is whack and probably only works on wheat
 		SendInput, {space Down}
 		SendInput, {w Down}
-		randomBuf := Randomize(269,420) + crop/16.5
+		randomBuf := Randomize(269,420) + crop/18
 		Sleep, randomBuf
 		SendInput, {w Up}
 		; lefts
@@ -175,7 +232,7 @@ Walk_wgarden(crop, rows) {
 		; forward  this calculation is whack and probably only works on wheat
 		SendInput, {space Down}
 		SendInput, {w Down}
-		randomBuf := Randomize(269,420) + crop/16.5
+		randomBuf := Randomize(269,420) + crop/18
 		Sleep, randomBuf
 		SendInput, {w Up}
 		; temp pause at the end of loop
@@ -244,10 +301,22 @@ Loop {
 F11::
 Loop {
 	Warp_garden()
-	Walk_wgarden(wartTime, 8)
+	Walk_wgarden(wartTime/2, 8)
+}
+
+; Cane loop
+F12::
+Loop {
+	Warp_garden()
+	Walk_cgarden(caneTime, 15)
 }
 
 
 ^r:: ; press control+r to reload
 Reload
 return
+
+
+;TODO: fix wart forward-slowness
+;TODO: fix pumpkin delay issue
+;TODO: fix last-half-walk-problem
