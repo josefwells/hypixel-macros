@@ -203,7 +203,7 @@ Walk_cgarden(crop, rows) {
 }
 		
 ; wgarden = wheat/wart, fun!
-Walk_wgarden(crop, rows) {
+Walk_wheatgarden(crop, rows) {
         ; Start clicking
 	SendInput, {space Down}
 	Loop % rows {
@@ -213,26 +213,69 @@ Walk_wgarden(crop, rows) {
 		SendInput, {space Down}
 		SendInput, {d Down}
 		Short_forward()
-		randomBuf := Randomize(1069,1420) + crop
+		randomBuf := Randomize(269,420) + crop
 		Sleep, randomBuf
 		SendInput, {d Up}
 		; forward  this calculation is whack and probably only works on wheat
 		SendInput, {space Down}
 		SendInput, {w Down}
-		randomBuf := Randomize(269,420) + crop/18
+		randomBuf := Randomize(269,420) + crop/19
 		Sleep, randomBuf
 		SendInput, {w Up}
 		; lefts
 		SendInput, {space Down}
 		SendInput, {a Down}
 		Short_forward()
-		randomBuf := Randomize(1069,1420) + crop
+		randomBuf := Randomize(269,420) + crop
 		Sleep, randomBuf
 		SendInput, {a Up}
 		; forward  this calculation is whack and probably only works on wheat
 		SendInput, {space Down}
 		SendInput, {w Down}
-		randomBuf := Randomize(269,420) + crop/18
+		randomBuf := Randomize(269,420) + crop/19
+		Sleep, randomBuf
+		SendInput, {w Up}
+		; temp pause at the end of loop
+		randomBuf := Randomize(69,169)
+		Sleep, randomBuf
+	}
+	SendInput, {space Up}
+}
+		
+; wgarden = wheat/wart, fun!
+Walk_wartgarden(crop, rows) {
+        ; Start clicking
+	SendInput, {space Down}
+	Loop % rows {
+		randomBuf := Randomize(69,169)
+		Sleep, randomBuf
+		; Start right
+		SendInput, {space Down}
+		SendInput, {d Down}
+		Short_forward()
+		randomBuf := Randomize(269,420) + crop
+		Sleep, randomBuf
+		SendInput, {d Up}
+		; forward  this calculation is whack and probably only works on wheat
+		SendInput, {space Down}
+		SendInput, {w Down}
+		randomBuf := Randomize(269,420) + crop/32
+		Sleep, randomBuf
+		SendInput, {w Up}
+		; lefts
+		SendInput, {space Down}
+		SendInput, {a Down}
+		Short_forward()
+		randomBuf := Randomize(269,420) + crop
+		Sleep, randomBuf
+		SendInput, {a Up}
+		; if we are on the last iteration
+		if (A_Index == rows)
+			break ; finish loop before we walk forward.
+		; forward  this calculation is whack and probably only works on wheat
+		SendInput, {space Down}
+		SendInput, {w Down}
+		randomBuf := Randomize(269,420) + crop/32
 		Sleep, randomBuf
 		SendInput, {w Up}
 		; temp pause at the end of loop
@@ -280,7 +323,7 @@ Loop {
 F8::
 Loop {
 	Warp_garden()
-	Walk_wgarden(wheatTime, 16)
+	Walk_wheatgarden(wheatTime, 16)
 }
 
 ; Pumpkin loop
@@ -294,14 +337,14 @@ Loop {
 F10::
 Loop {
 	Warp_garden()
-	Walk_wgarden(wartTime, 7)
+	Walk_wartgarden(wartTime, 7)
 }
 
 ; Short loop (carrot/potato)
 F11::
 Loop {
 	Warp_garden()
-	Walk_wgarden(wartTime/2, 8)
+	Walk_wartgarden(wartTime/2, 8)
 }
 
 ; Cane loop
@@ -317,6 +360,4 @@ Reload
 return
 
 
-;TODO: fix wart forward-slowness
 ;TODO: fix pumpkin delay issue
-;TODO: fix last-half-walk-problem
