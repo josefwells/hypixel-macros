@@ -189,6 +189,9 @@ Walk_cgarden(crop, rows) {
 		randomBuf := Randomize(1069,1420) + crop
 		Sleep, randomBuf
 		SendInput, {a Up}
+		; if we are on the last iteration
+		if (A_Index == rows)
+			break ; finish loop before we walk forward.
 		; forward  this calculation is whack and probably only works on wheat
 		SendInput, {space Down}
 		SendInput, {w Down}
@@ -229,6 +232,9 @@ Walk_wheatgarden(crop, rows) {
 		randomBuf := Randomize(269,420) + crop
 		Sleep, randomBuf
 		SendInput, {a Up}
+		; if we are on the last iteration
+		if (A_Index == rows)
+			break ; finish loop before we walk forward.
 		; forward  this calculation is whack and probably only works on wheat
 		SendInput, {space Down}
 		SendInput, {w Down}
@@ -344,7 +350,7 @@ Loop {
 F11::
 Loop {
 	Warp_garden()
-	Walk_wartgarden(wartTime/2, 8)
+	Walk_wheatgarden(wheatTime, 8)
 }
 
 ; Cane loop
