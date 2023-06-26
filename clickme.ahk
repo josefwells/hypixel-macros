@@ -13,6 +13,8 @@ wheatSpeed := 4  ; 4.3*93 = 4
 pumpkinSpeed := 7.53  ; 4.3*1.75 <sideways?>
 wartSpeed := 4 ; 4.3*93 = 4
 caneSpeed := 10 ; 4.3*2.33 = 10
+shroomSpeed := 10 ; guess
+
 
 ; Walking time.  96blocks ~ -2 blocks side = 94blocks
 ; wheatPlotWidth := 94
@@ -26,6 +28,8 @@ wheatTime := 23500 ; (plotWidth / wheatSpeed)*1000
 wartTime := 47500 ; (plotWidth*2 / wheatSpeed)*1000
 
 caneTime := 18000 ; (plotWidth*2 / caneSpeed)*1000
+
+shroomTime := 18000 ; guess
 ;wheatTime := 23500 ; (plotWidth / wheatSpeed)*1000 ; too short still?
 ;wheatTime := 20000 ; (plotWidth / wheatSpeed)*1000 ; wy too short
 ;wheatTime := 100
@@ -158,6 +162,7 @@ Walk_pgarden(crop, rows) {
 	SendInput, {space Up}
 }
 
+
 ; cgarden = cane, fun!
 Walk_cgarden(crop, rows) {
         ; Start clicking
@@ -204,8 +209,74 @@ Walk_cgarden(crop, rows) {
 	}
 	SendInput, {space Up}
 }
-		
-; wgarden = wheat/wart, fun!
+
+
+; shrooms
+Walk_sgarden(crop, rows) {
+	Click, Down Right
+	randomBuf := Randomize(9,69)
+	Sleep, randomBuf
+	Click, Up Right
+        ; Start clicking
+	SendInput, {space Down}
+	Loop % rows {
+		; forward  this calculation is whack and probably only works on wheat	
+		randomBuf := Randomize(69,169)
+		Sleep, randomBuf
+		; Start right (forward for shrooms)
+		SendInput, {space Down}
+		SendInput, {w Down}
+		randomBuf := Randomize(269,420) + crop
+		Sleep, randomBuf
+		SendInput, {w Up}
+		; forward  this calculation is whack and probably only works on wheat
+		SendInput, {space Down}
+		SendInput, {w Down}
+		randomBuf := Randomize(269,420) + crop/19
+		Sleep, randomBuf
+		SendInput, {w Up}
+		; lefts
+		SendInput, {space Down}
+		SendInput, {a Down}
+		SendInput, {w Down}
+		randomBuf := Randomize(269,420) + crop*2 ; long walk back with w pressed
+		Sleep, randomBuf
+		SendInput, {a Up}
+		SendInput, {w Up}
+		; if we are on the last iteration
+		; if (A_Index == rows)
+		; 	break ; finish loop before we walk forward.
+		; forward  this calculation is whack and probably only works on wheat
+		SendInput, {space Down}
+		SendInput, {w Down}
+		randomBuf := Randomize(269,420) + crop/32
+		Sleep, randomBuf
+		SendInput, {w Up}
+		; fix strange left edge
+		SendInput, {d Down}
+		Short_forward()
+		SendInput, {d up}
+		SendInput, {space Down}
+		SendInput, {w Down}
+		randomBuf := Randomize(269,420) + crop/32
+		Sleep, randomBuf
+		SendInput, {w Up}
+		; done fix left edge
+		; temp pause at the end of loop
+		randomBuf := Randomize(69,169)
+		Sleep, randomBuf
+		; if we are at the middle iteration
+		if (A_Index == 4) {
+			Click, Down Right
+			randomBuf := Randomize(9,69)
+			Sleep, randomBuf
+			Click, Up Right
+		}
+	}
+	SendInput, {space Up}
+}
+
+; wheat
 Walk_wheatgarden(crop, rows) {
         ; Start clicking
 	SendInput, {space Down}
@@ -247,8 +318,8 @@ Walk_wheatgarden(crop, rows) {
 	}
 	SendInput, {space Up}
 }
-		
-; wgarden = wheat/wart, fun!
+
+; wart
 Walk_wartgarden(crop, rows) {
         ; Start clicking
 	SendInput, {space Down}
@@ -278,10 +349,22 @@ Walk_wartgarden(crop, rows) {
 		; if we are on the last iteration
 		if (A_Index == rows)
 			break ; finish loop before we walk forward.
+		; if (A_Index == 3) {
+		; 	; forward  this calculation is whack and probably only works on wheat
+		; 	SendInput, {space Down}
+		; 	SendInput, {w Down}
+		; 	randomBuf := Randomize(420,469) + crop/32
+		; 	Sleep, randomBuf
+		; 	SendInput, {w Up}
+		; 	; fix strange left edge
+		; 	SendInput, {d Down}
+		; 	Short_forward()
+		; 	SendInput, {d up}
+		; }                     
 		; forward  this calculation is whack and probably only works on wheat
 		SendInput, {space Down}
 		SendInput, {w Down}
-		randomBuf := Randomize(269,420) + crop/32
+		randomBuf := Randomize(420,469) + crop/32
 		Sleep, randomBuf
 		SendInput, {w Up}
 		; temp pause at the end of loop
@@ -359,6 +442,14 @@ Loop {
 	Warp_garden()
 	Walk_cgarden(caneTime, 15)
 }
+
+; Shroom loop
+^h::
+Loop {
+	Warp_garden()
+	Walk_sgarden(shroomTime, 8)
+}
+
 
 
 ^r:: ; press control+r to reload
