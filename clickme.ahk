@@ -9,12 +9,13 @@ DetectHiddenWindows, on
 buttonList := ["a", "s", "d", "w"]
 
 ; Walking speed = 4.3B/s * <speed> = X blocks/sec
-wheatSpeed := 4  ; 4.3*93 = 4
-pumpkinSpeed := 7.53  ; 4.3*1.75 <sideways?>
-wartSpeed := 4 ; 4.3*93 = 4
-caneSpeed := 10 ; 4.3*2.33 = 10
-shroomSpeed := 10 ; guess
-
+; wheatSpeed := 4  ; 4.3*93 = 4
+; pumpkinSpeed := 7.53  ; 4.3*1.75 <sideways?>
+; wartSpeed := 4 ; 4.3*93 = 4
+; caneSpeed := 10 ; 4.3*2.33 = 10
+; shroomSpeed := 10 ; guess
+; cactusSpeed := 17.2 ; 4.3* 4.00 = 17.2
+; cocoaSpeed :=    ; 4.3* 1.55 = 6.665
 
 ; Walking time.  96blocks ~ -2 blocks side = 94blocks
 ; wheatPlotWidth := 94
@@ -27,7 +28,6 @@ pumpkinTime := 24900 ; (pumplinPlotWidth / pumpkinSpeed )*1000 ; too short
 wheatTime := 23500 ; (plotWidth / wheatSpeed)*1000
 wartTime := 47500 ; (plotWidth*2 / wheatSpeed)*1000
 
-caneTime := 18000 ; (plotWidth*2 / caneSpeed)*1000
 
 shroomTime := 18000 ; guess
 ;wheatTime := 23500 ; (plotWidth / wheatSpeed)*1000 ; too short still?
@@ -35,6 +35,15 @@ shroomTime := 18000 ; guess
 ;wheatTime := 100
 
 
+; blockwidth = superfarm 5 plots * 96 blocks = 480
+; ( blockwidth / speed ) * 1000
+superTime := 120000 ; 120s * 1000
+caneTime := 48000 ; (plotWidth*5 / caneSpeed)*1000 ; but we are up against a thing here.. so I dunno
+cactusTime := 27906 ; (480/17.2) * 1000
+;cactusTime := 27 ; (480/17.2) * 1000
+cocoaTime := 72018 ; (480/6.665) * 1000
+
+;superTime := 2000 ; 120s * 1000
 
 ;cane 15 lanes
 
@@ -99,7 +108,7 @@ Warp_garden() {
 }
 
 Short_forward() {
-	; Move forward a short random time
+	; Move forward a short random time	
 	randtime := Randomize(169, 420)
 	Send, {w Down}
 	Sleep, randtime
@@ -112,6 +121,168 @@ Short_backward() {
 	Send, {s Down}
 	Sleep, randtime
 	Send, {s Up}
+}
+
+Reverse_Direction(direction) {
+	if (direction == "a") {
+		return "d"
+	}
+	else if (direction == "d") {
+		return "a"
+	}
+	else if (direction == "w") {
+		return "s"
+	}
+	else if (direction == "s") {
+		return "w"
+	}
+	else {
+		return "space"
+	}
+}
+
+Swap_Back_Left(direction) {
+	if (direction == "a") {
+		return "s"
+	}
+	else {
+		return "a"
+	}
+}
+
+Cactus_backward() {
+	; Move backward for cactus speeds
+	randtime := Randomize(269, 369)
+	Send, {s Down}
+	Sleep, randtime
+	Send, {s Up}
+}
+
+Cocoa_right() {
+	; Move forward for cactus speeds
+	randtime := Randomize(369, 420)
+	Send, {d Down}
+	Sleep, randtime
+	Send, {d Up}
+}
+
+Walk_WWPC(dir) {
+	; Start clicking
+	global superTime
+	SendInput, {space Down}
+	Loop % 3 {
+		randomBuf := Randomize(69,169)
+		Sleep, randomBuf
+		; Start right
+		SendInput, {space Down}
+		SendInput, {%dir% Down}
+		randomBuf := Randomize(69,420) + superTime
+		Sleep, randomBuf
+		SendInput, {%dir% Up}
+		dir := Reverse_Direction(dir)
+		if (A_Index == 3)
+			break ; finish loop before we walk back
+		SendInput, {space Down}
+		SendInput, {%dir% Down}
+		randombuf := Randomize(69,420) + superTime
+		Sleep, randomBuf
+		SendInput, {%dir% Up}
+		dir := Reverse_Direction(dir)
+		SendInput, {space Down}
+		randomBuf := Randomize(69,169)
+		Sleep, randomBuf
+	}
+	SendInput, {space Up}
+}
+
+Walk_Cane(dir) {
+	; Start clicking
+	global caneTime
+	SendInput, {space Down}
+	Loop % 5 {
+		randomBuf := Randomize(69,169)
+		Sleep, randomBuf
+		; Start right
+		SendInput, {space Down}
+		SendInput, {%dir% Down}
+		randomBuf := Randomize(69,420) + caneTime
+		Sleep, randomBuf
+		SendInput, {%dir% Up}
+		dir := Swap_Back_Left(dir)
+		if (A_Index == 5)
+			break ; finish loop before we walk back
+		SendInput, {space Down}
+		SendInput, {%dir% Down}
+		randombuf := Randomize(69,420) + caneTime
+		Sleep, randomBuf
+		SendInput, {%dir% Up}
+		dir := Swap_Back_Left(dir)
+		SendInput, {space Down}
+		randomBuf := Randomize(69,169)
+		Sleep, randomBuf
+	}
+	SendInput, {space Up}
+}
+
+Walk_Cactus(dir) {
+	; Start clicking
+	global cactusTime
+	SendInput, {space Down}
+	Loop % 10 {
+		randomBuf := Randomize(69,169)
+		Sleep, randomBuf
+		; Start right
+		SendInput, {space Down}
+		SendInput, {%dir% Down}
+		randomBuf := Randomize(69,420) + cactusTime
+		Sleep, randomBuf
+		SendInput, {%dir% Up}
+		Cactus_backward()
+		dir := Reverse_Direction(dir)
+		if (A_Index == 10)
+			break ; finish loop before we walk back
+		SendInput, {space Down}
+		SendInput, {%dir% Down}
+		randombuf := Randomize(69,420) + cactusTime
+		Sleep, randomBuf
+		SendInput, {%dir% Up}
+		Cactus_backward()
+		dir := Reverse_Direction(dir)
+		SendInput, {space Down}
+		randomBuf := Randomize(69,169)
+		Sleep, randomBuf
+	}
+	SendInput, {space Up}
+}
+
+Walk_Cocoa(dir) {
+	; Start clicking
+	global cocoaTime
+	SendInput, {space Down}
+	Loop % 8 {
+		randomBuf := Randomize(69,169)
+		Sleep, randomBuf
+		; Start forward
+		SendInput, {space Down}
+		SendInput, {%dir% Down}
+		randomBuf := Randomize(69,420) + cocoaTime
+		Sleep, randomBuf
+		SendInput, {%dir% Up}
+		Cocoa_Right()
+                ; Start Backward
+		dir := Reverse_Direction(dir)
+		SendInput, {space Down}
+		SendInput, {%dir% Down}
+		randombuf := Randomize(69,420) + cocoaTime
+		Sleep, randomBuf
+		SendInput, {%dir% Up}
+		Cocoa_Right()
+		dir := Reverse_Direction(dir)
+		SendInput, {space Down}
+		randomBuf := Randomize(69,169)
+		Sleep, randomBuf
+	}
+	SendInput, {space Up}
 }
 
 
@@ -347,8 +518,6 @@ Walk_wartgarden(crop, rows) {
 		Sleep, randomBuf
 		SendInput, {a Up}
 		; if we are on the last iteration
-		if (A_Index == rows)
-			break ; finish loop before we walk forward.
 		; if (A_Index == 3) {
 		; 	; forward  this calculation is whack and probably only works on wheat
 		; 	SendInput, {space Down}
@@ -408,18 +577,18 @@ Loop {
   Sleep, %loopwait%
 }
 
-; Wheat loop
+; Cactus loop
 F8::
 Loop {
 	Warp_garden()
-	Walk_wheatgarden(wheatTime, 16)
+	Walk_Cactus("d")
 }
 
-; Pumpkin loop
+; Cane Loop
 F9::
 Loop {
 	Warp_garden()
-	Walk_pgarden(pumpkinTime, 9)
+	Walk_Cane("s")
 }
 
 ; Wart loop
@@ -429,18 +598,18 @@ Loop {
 	Walk_wartgarden(wartTime, 7)
 }
 
-; Short loop (carrot/potato)
+; Left Long Loop
 F11::
 Loop {
 	Warp_garden()
-	Walk_wheatgarden(wheatTime, 8)
+	Walk_WWPC("a")
 }
 
-; Cane loop
+; Right Long Loop
 F12::
 Loop {
 	Warp_garden()
-	Walk_cgarden(caneTime, 15)
+	Walk_WWPC("d")
 }
 
 ; Shroom loop
@@ -449,6 +618,14 @@ Loop {
 	Warp_garden()
 	Walk_sgarden(shroomTime, 8)
 }
+
+; Cocoa Loop
+^t::
+Loop {
+	Warp_garden()
+	Walk_Cocoa("w")
+}
+
 
 
 
