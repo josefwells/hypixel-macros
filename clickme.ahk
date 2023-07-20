@@ -8,46 +8,16 @@ DetectHiddenWindows, on
 
 buttonList := ["a", "s", "d", "w"]
 
+
+; Superfarm https://www.youtube.com/watch?v=KmY4CN1Wyy0
+
 ; Walking speed = 4.3B/s * <speed> = X blocks/sec
-; wheatSpeed := 4  ; 4.3*93 = 4
-; pumpkinSpeed := 7.53  ; 4.3*1.75 <sideways?>
-; wartSpeed := 4 ; 4.3*93 = 4
-; caneSpeed := 10 ; 4.3*2.33 = 10
-; shroomSpeed := 10 ; guess
-; cactusSpeed := 17.2 ; 4.3* 4.00 = 17.2
-; cocoaSpeed :=    ; 4.3* 1.55 = 6.665
-
-; Walking time.  96blocks ~ -2 blocks side = 94blocks
-; wheatPlotWidth := 94
-; PumpkinPlotWidth := 188
-
-; Walking time pumpin double wide. 188 blocks
-;pumpkinTime := 21500 ; (pumplinPlotWidth / pumpkinSpeed )*1000 ; too short
-pumpkinTime := 24900 ; (pumplinPlotWidth / pumpkinSpeed )*1000 ; too short
-
-wheatTime := 23500 ; (plotWidth / wheatSpeed)*1000
-wartTime := 47500 ; (plotWidth*2 / wheatSpeed)*1000
-
-
-shroomTime := 18000 ; guess
-;wheatTime := 23500 ; (plotWidth / wheatSpeed)*1000 ; too short still?
-;wheatTime := 20000 ; (plotWidth / wheatSpeed)*1000 ; wy too short
-;wheatTime := 100
-
-
 ; blockwidth = superfarm 5 plots * 96 blocks = 480
 ; ( blockwidth / speed ) * 1000
 superTime := 120000 ; 120s * 1000
-caneTime := 48000 ; (plotWidth*5 / caneSpeed)*1000 ; but we are up against a thing here.. so I dunno
+caneTime := 48000 ; (plotWidth*5 / caneSpeed)*1000
 cactusTime := 27906 ; (480/17.2) * 1000
-;cactusTime := 27 ; (480/17.2) * 1000
 cocoaTime := 72018 ; (480/6.665) * 1000
-
-;superTime := 2000 ; 120s * 1000
-
-;cane 15 lanes
-
-; Pause  ; Start the script paused initially
 
 Randomize(min, max) {
     Random, randomNum, %min%, %max%
@@ -285,266 +255,15 @@ Walk_Cocoa(dir) {
 	SendInput, {space Up}
 }
 
-
-Walk_pgarden(crop, rows) {
-        ; Start clicking
-	SendInput, {space Down}
-	Loop % rows {
-		randomBuf := Randomize(69,169)
-		Sleep, randomBuf
-		; Start right
-		SendInput, {space Down}
-		SendInput, {d Down}
-		Short_forward()
-		randomBuf := Randomize(1069,1420) + crop
-		Sleep, randomBuf
-		SendInput, {d Up}
-		; forward  this calculation is whack and probably only works on wheat
-		SendInput, {space Down}
-		SendInput, {w Down}
-		randomBuf := Randomize(269,420) + crop/16.5
-		Sleep, randomBuf
-		SendInput, {w Up}
-		; lefts
-		SendInput, {space Down}
-		SendInput, {a Down}
-		Short_forward()
-		randomBuf := Randomize(1069,1420) + crop
-		Sleep, randomBuf
-		SendInput, {a Up}
-		; forward  this calculation is whack and probably only works on wheat
-		SendInput, {space Down}
-		SendInput, {w Down}
-		randomBuf := Randomize(269,420) + crop/16.5
-		Sleep, randomBuf
-		SendInput, {w Up}
-		SendInput, {d Down}
-		Short_forward()
-		SendInput, {d up}
-		SendInput, {space Down}
-		SendInput, {w Down}
-		randomBuf := Randomize(269,420) + crop/16.5
-		Sleep, randomBuf
-		SendInput, {w Up}
-		; temp pause at the end of loop
-		randomBuf := Randomize(69,169)
-		Sleep, randomBuf
-	}
-	SendInput, {space Up}
-}
+;;;
+;;;  Actual hotkeys are below
+;;;
 
 
-; cgarden = cane, fun!
-Walk_cgarden(crop, rows) {
-        ; Start clicking
-	SendInput, {space Down}
-	Loop % rows {
-		randomBuf := Randomize(69,169)
-		Sleep, randomBuf
-		; Start right
-		SendInput, {space Down}
-		SendInput, {d Down}
-		randomBuf := Randomize(320,469)
-		Sleep, randomBuf
-		Short_backward()
-		randomBuf := Randomize(1069,1420) + crop
-		Sleep, randomBuf
-		SendInput, {d Up}
-		; forward  this calculation is whack and probably only works on wheat
-		SendInput, {space Down}
-		SendInput, {w Down}
-		randomBuf := Randomize(269,420) + 769
-		Sleep, randomBuf
-		SendInput, {w Up}
-		; lefts
-		SendInput, {space Down}
-		SendInput, {a Down}
-		randomBuf := Randomize(320,469)
-		Sleep, randomBuf
-		Short_backward()
-		randomBuf := Randomize(1069,1420) + crop
-		Sleep, randomBuf
-		SendInput, {a Up}
-		; if we are on the last iteration
-		if (A_Index == rows)
-			break ; finish loop before we walk forward.
-		; forward  this calculation is whack and probably only works on wheat
-		SendInput, {space Down}
-		SendInput, {w Down}
-		randomBuf := Randomize(269,420) + 769
-		Sleep, randomBuf
-		SendInput, {w Up}
-		; temp pause at the end of loop
-		randomBuf := Randomize(69,169)
-		Sleep, randomBuf
-	}
-	SendInput, {space Up}
-}
-
-
-; shrooms
-Walk_sgarden(crop, rows) {
-	Click, Down Right
-	randomBuf := Randomize(9,69)
-	Sleep, randomBuf
-	Click, Up Right
-        ; Start clicking
-	SendInput, {space Down}
-	Loop % rows {
-		; forward  this calculation is whack and probably only works on wheat	
-		randomBuf := Randomize(69,169)
-		Sleep, randomBuf
-		; Start right (forward for shrooms)
-		SendInput, {space Down}
-		SendInput, {w Down}
-		randomBuf := Randomize(269,420) + crop
-		Sleep, randomBuf
-		SendInput, {w Up}
-		; forward  this calculation is whack and probably only works on wheat
-		SendInput, {space Down}
-		SendInput, {w Down}
-		randomBuf := Randomize(269,420) + crop/19
-		Sleep, randomBuf
-		SendInput, {w Up}
-		; lefts
-		SendInput, {space Down}
-		SendInput, {a Down}
-		SendInput, {w Down}
-		randomBuf := Randomize(269,420) + crop*2 ; long walk back with w pressed
-		Sleep, randomBuf
-		SendInput, {a Up}
-		SendInput, {w Up}
-		; if we are on the last iteration
-		; if (A_Index == rows)
-		; 	break ; finish loop before we walk forward.
-		; forward  this calculation is whack and probably only works on wheat
-		SendInput, {space Down}
-		SendInput, {w Down}
-		randomBuf := Randomize(269,420) + crop/32
-		Sleep, randomBuf
-		SendInput, {w Up}
-		; fix strange left edge
-		SendInput, {d Down}
-		Short_forward()
-		SendInput, {d up}
-		SendInput, {space Down}
-		SendInput, {w Down}
-		randomBuf := Randomize(269,420) + crop/32
-		Sleep, randomBuf
-		SendInput, {w Up}
-		; done fix left edge
-		; temp pause at the end of loop
-		randomBuf := Randomize(69,169)
-		Sleep, randomBuf
-		; if we are at the middle iteration
-		if (A_Index == 4) {
-			Click, Down Right
-			randomBuf := Randomize(9,69)
-			Sleep, randomBuf
-			Click, Up Right
-		}
-	}
-	SendInput, {space Up}
-}
-
-; wheat
-Walk_wheatgarden(crop, rows) {
-        ; Start clicking
-	SendInput, {space Down}
-	Loop % rows {
-		randomBuf := Randomize(69,169)
-		Sleep, randomBuf
-		; Start right
-		SendInput, {space Down}
-		SendInput, {d Down}
-		Short_forward()
-		randomBuf := Randomize(269,420) + crop
-		Sleep, randomBuf
-		SendInput, {d Up}
-		; forward  this calculation is whack and probably only works on wheat
-		SendInput, {space Down}
-		SendInput, {w Down}
-		randomBuf := Randomize(269,420) + crop/19
-		Sleep, randomBuf
-		SendInput, {w Up}
-		; lefts
-		SendInput, {space Down}
-		SendInput, {a Down}
-		Short_forward()
-		randomBuf := Randomize(269,420) + crop
-		Sleep, randomBuf
-		SendInput, {a Up}
-		; if we are on the last iteration
-		if (A_Index == rows)
-			break ; finish loop before we walk forward.
-		; forward  this calculation is whack and probably only works on wheat
-		SendInput, {space Down}
-		SendInput, {w Down}
-		randomBuf := Randomize(269,420) + crop/19
-		Sleep, randomBuf
-		SendInput, {w Up}
-		; temp pause at the end of loop
-		randomBuf := Randomize(69,169)
-		Sleep, randomBuf
-	}
-	SendInput, {space Up}
-}
-
-; wart
-Walk_wartgarden(crop, rows) {
-        ; Start clicking
-	SendInput, {space Down}
-	Loop % rows {
-		randomBuf := Randomize(69,169)
-		Sleep, randomBuf
-		; Start right
-		SendInput, {space Down}
-		SendInput, {d Down}
-		Short_forward()
-		randomBuf := Randomize(269,420) + crop
-		Sleep, randomBuf
-		SendInput, {d Up}
-		; forward  this calculation is whack and probably only works on wheat
-		SendInput, {space Down}
-		SendInput, {w Down}
-		randomBuf := Randomize(269,420) + crop/32
-		Sleep, randomBuf
-		SendInput, {w Up}
-		; lefts
-		SendInput, {space Down}
-		SendInput, {a Down}
-		Short_forward()
-		randomBuf := Randomize(269,420) + crop
-		Sleep, randomBuf
-		SendInput, {a Up}
-		; if we are on the last iteration
-		; if (A_Index == 3) {
-		; 	; forward  this calculation is whack and probably only works on wheat
-		; 	SendInput, {space Down}
-		; 	SendInput, {w Down}
-		; 	randomBuf := Randomize(420,469) + crop/32
-		; 	Sleep, randomBuf
-		; 	SendInput, {w Up}
-		; 	; fix strange left edge
-		; 	SendInput, {d Down}
-		; 	Short_forward()
-		; 	SendInput, {d up}
-		; }                     
-		; forward  this calculation is whack and probably only works on wheat
-		SendInput, {space Down}
-		SendInput, {w Down}
-		randomBuf := Randomize(420,469) + crop/32
-		Sleep, randomBuf
-		SendInput, {w Up}
-		; temp pause at the end of loop
-		randomBuf := Randomize(69,169)
-		Sleep, randomBuf
-	}
-	SendInput, {space Up}
-}
-		
-
-
+; Pause/unpause.  Timers still run, but nothing else
+; so if you pause, you can move to the end of your current row
+; line up, and unpause, pickign up where you left off.
+; This is harder in the "superfarm" because of the cramped quarters.
 F6::
 SendInput, {space Up}
 SendInput, {w Up}
@@ -555,14 +274,8 @@ Click, Up Left
 Pause,, 1
 return
 
-; F10::
-; MsgBox, 4,, wheatSpeed is %randnum% , 10
-; IfMsgBox Timeout
-;     MsgBox You didn't press YES or NO within the 10-second period.
-; else IfMsgBox No
-;     ExitApp
-
-; Goblin loop
+; Goblin loop; pretty crappy, prolly get you banned
+; and makes squat for money.
 F7::
 Loop {
   Rand_button(buttonList)
@@ -591,47 +304,33 @@ Loop {
 	Walk_Cane("s")
 }
 
-; Wart loop
-F10::
-Loop {
-	Warp_garden()
-	Walk_wartgarden(wartTime, 7)
-}
-
-; Left Long Loop
-F11::
-Loop {
-	Warp_garden()
-	Walk_WWPC("a")
-}
-
-; Right Long Loop
-F12::
-Loop {
-	Warp_garden()
-	Walk_WWPC("d")
-}
-
-; Shroom loop
-^h::
-Loop {
-	Warp_garden()
-	Walk_sgarden(shroomTime, 8)
-}
-
-; Cocoa Loop
+; Cocoa Loop   (Ctrl-t)
 ^t::
 Loop {
 	Warp_garden()
 	Walk_Cocoa("w")
 }
 
-
-
-
+; Reload script.  If things go bad, pause(F6) and reload(Ctrl-r)
 ^r:: ; press control+r to reload
 Reload
 return
 
+; These last ones are super-farm (carrot, potato, wheat, wart) since they
+; are all the same speed and basically the same layout, but left or right facing
+; easy to remember because F11, the 1 looks like an l, so that one goes left first.
 
-;TODO: fix pumpkin delay issue
+; Left Long Loop ; for superfarm where you start off going left.
+F11::
+Loop {
+	Warp_garden()
+	Walk_WWPC("a")
+}
+
+; Right Long Loop ; for superfarm where you start off going right.
+F12::
+Loop {
+	Warp_garden()
+	Walk_WWPC("d")
+}
+
