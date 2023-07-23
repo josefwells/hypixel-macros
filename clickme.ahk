@@ -12,12 +12,22 @@ buttonList := ["a", "s", "d", "w"]
 ; Superfarm https://www.youtube.com/watch?v=KmY4CN1Wyy0
 
 ; Walking speed = 4.3B/s * <speed> = X blocks/sec
+; wart/carrot/potato/wheat = 4.3 * .93 = 3.999 ~4
+
+; pumpkin/melon := 7.53  ; 4.3*1.75 <sideways?>
+; caneSpeed := 10 ; 4.3*2.33 = 10
+; cactusSpeed := 17.2 ; 4.3* 4.64 = 19.952
+; cocoaSpeed := 6.665   ; 4.3* 1.55 = 6.665
+; gourdSpeed := ; 4.3* 1.55 = 6.665
+
 ; blockwidth = superfarm 5 plots * 96 blocks = 480
 ; ( blockwidth / speed ) * 1000
 superTime := 120000 ; 120s * 1000
 caneTime := 48000 ; (plotWidth*5 / caneSpeed)*1000
-cactusTime := 27906 ; (480/17.2) * 1000
+cactusTime := 23900 ; (480/19.952) * 1000
 cocoaTime := 72018 ; (480/6.665) * 1000
+gourdTime := 72018 ; (480/6.665) * 1000
+
 
 Randomize(min, max) {
     Random, randomNum, %min%, %max%
@@ -128,6 +138,13 @@ Cactus_backward() {
 	Send, {s Up}
 }
 
+Gourd_forward() {
+	randtime := Randomize(1869, 2069)
+	Send, {w Down}
+	Sleep, randtime
+	Send, {w Up}
+}
+
 Cocoa_right() {
 	; Move forward for cactus speeds
 	randtime := Randomize(369, 420)
@@ -204,7 +221,7 @@ Walk_Cactus(dir) {
 		; Start right
 		SendInput, {space Down}
 		SendInput, {%dir% Down}
-		randomBuf := Randomize(69,420) + cactusTime
+		randomBuf := Randomize(69,369) + cactusTime
 		Sleep, randomBuf
 		SendInput, {%dir% Up}
 		Cactus_backward()
@@ -213,7 +230,7 @@ Walk_Cactus(dir) {
 			break ; finish loop before we walk back
 		SendInput, {space Down}
 		SendInput, {%dir% Down}
-		randombuf := Randomize(69,420) + cactusTime
+		randombuf := Randomize(69,369) + cactusTime
 		Sleep, randomBuf
 		SendInput, {%dir% Up}
 		Cactus_backward()
@@ -247,6 +264,36 @@ Walk_Cocoa(dir) {
 		Sleep, randomBuf
 		SendInput, {%dir% Up}
 		Cocoa_Right()
+		dir := Reverse_Direction(dir)
+		SendInput, {space Down}
+		randomBuf := Randomize(69,169)
+		Sleep, randomBuf
+	}
+	SendInput, {space Up}
+}
+
+Walk_Gourds(dir) {
+	; Start clicking
+	global gourdTime
+	SendInput, {space Down}
+	Loop % 5 {
+		randomBuf := Randomize(69,169)
+		Sleep, randomBuf
+		SendInput, {space Down}
+		SendInput, {%dir% Down}
+		randomBuf := Randomize(69,420) + gourdTime
+		Sleep, randomBuf
+		SendInput, {%dir% Up}
+		if (A_Index == 5)
+			break ; finish loop before we walk back
+		Gourd_forward()
+		dir := Reverse_Direction(dir)
+		SendInput, {space Down}
+		SendInput, {%dir% Down}
+		randombuf := Randomize(69,420) + gourdTime
+		Sleep, randomBuf
+		SendInput, {%dir% Up}
+		Gourd_forward()
 		dir := Reverse_Direction(dir)
 		SendInput, {space Down}
 		randomBuf := Randomize(69,169)
@@ -302,6 +349,13 @@ F9::
 Loop {
 	Warp_garden()
 	Walk_Cane("s")
+}
+
+; Gourd Loop
+F10::
+Loop {
+	Warp_garden()
+	Walk_Gourds("a")
 }
 
 ; Cocoa Loop   (Ctrl-t)
