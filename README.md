@@ -34,3 +34,10 @@ easy to remember because F11, the 1 looks like an l, so that one goes left first
 The code is commented, kind of a mess, but it worked a while back pretty well.
 Many assumptions about walking speed, etc are built in with the formulas shown
 so you should be able to math it out if something changes for your setup.
+
+# ChatTriggers "funtime_ct"
+If you are macroing, you probably want to disconnect on reboot or other issues.
+
+## How to use
+Been a while since I used this, but assuming you have chat_triggers mod, you
+should be able to just add this in.

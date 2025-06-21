@@ -1,0 +1,7 @@
+{
+	"name": "funtime",
+	"author": "nop",
+	"entry": "index.js",
+	"description": "disconnects if things get dicey",
+	"version": "0.0.1"
+}
