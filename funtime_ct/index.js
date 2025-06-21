@@ -1,3 +1,13 @@
+// A disconnect occurred in your connection, so you were put in the SkyBlock Lobby!
+register("chat", (message, event) => {
+    console.log("Disconnect: "+message)
+    // Reboot message?
+    if (message.includes("SkyBlock Lobby")) {
+	console.log("quit")
+	Client.Companion.disconnect()
+    }
+}).setCriteria("A disconnect${message}").setContains();
+
 register("chat", (message, event) => {
     console.log("Important: "+message)
     // Reboot message?
